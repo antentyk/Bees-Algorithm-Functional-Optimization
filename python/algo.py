@@ -4,9 +4,9 @@ import os
 
 from data import data as samples
 
-scout_bees = 500
-elite = 2
-non_elite = 5
+scout_bees = 50000
+elite = 20
+non_elite = 50
 recruited_elite = 500
 recruited_non_elite = 300
 max_delta = 5
@@ -37,10 +37,11 @@ def find(cities):
         print("Global minimum:", answer)
     return answer
 
-def iteration(cities):
+def iteration(citiesinitial):
     answer = float('inf')
     situation = []
     for i in range(scout_bees):
+        cities = copy.copy(citiesinitial)
         random.shuffle(cities)
         situation.append((fitness(cities), copy.copy(cities)))
     situation.sort()
@@ -53,9 +54,9 @@ def iteration(cities):
 
 def find_best_neighbour(route, size):
     result = fitness(route)
-    for i in range(size):
+    for asd in range(size):
         current = copy.copy(route)
-        swapnum = random.randint(1, max_delta)
+        swapnum = max_delta
         for it in range(swapnum):
             i = random.randint(0, len(route) - 1)
             j = random.randint(0, len(route) - 1)
@@ -63,6 +64,6 @@ def find_best_neighbour(route, size):
         result = min(result, fitness(current))
     return result
 
-cities = list(map(tuple, samples[0]["cities"]))
+cities = sorted(list(map(tuple, samples[1]["cities"])))
 print(find(cities))
-print("Benchmark:", samples[0]["length"])
+print("Benchmark:", samples[1]["length"])
