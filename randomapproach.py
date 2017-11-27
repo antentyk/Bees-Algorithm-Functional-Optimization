@@ -8,6 +8,8 @@ from fitness import fitness
 from neighbour import neighbour
 
 cities = samples[0]["cities"]
+benchmark = samples[0]["length"]
+
 n = len(cities)
 
 result = float('inf')
@@ -19,6 +21,7 @@ while(SCOUTBEES > 0):
     situation = []
     for fly in range(SCOUTBEES):
         route = copy(cities)
+        shuffle(route)
         situation.append((fitness(route), route))
     situation.sort(key=lambda x: x[0])
     for i in range(min(len(situation), ELITE)):
@@ -30,6 +33,5 @@ while(SCOUTBEES > 0):
     SCOUTBEES -= (ELITE + NONELITE)
     system('cls')
     print("iteration", iterationcounter)
-    print(result)
-
-print("Result", result)
+    print("current optimal",result)
+    print("bench mark", benchmark)
