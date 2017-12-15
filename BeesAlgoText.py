@@ -50,3 +50,9 @@ class BeesAlgoText:
                                                                   self.best.x,
                                                                   self.best.y)
         return result
+
+
+if __name__ == '__main__':
+    b = BeesAlgoText(Settings)
+    b.get()
+    print(b.formreport())

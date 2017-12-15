@@ -7,6 +7,18 @@ from matplotlib.animation import ImageMagickFileWriter
 from Settings import Settings
 from Controller import Controller
 
+# _____________
+# WON'T WORK ON YOUR MACHINE UNLESS YOU INSTALL ImageMagick
+# _____________
+
+matplotlib.verbose.set_level("helpful")
+plt.rcParams['animation.convert_path'] = 'C:\\Program Files\\ImageMagick-7.0.7-Q16\\magick.exe'
+matplotlib.rcParams['animation.ffmpeg_path'] = 'C:\\ffmpeg\\bin\\ffmpeg.exe'
+
+# _____________
+# _____________
+# _____________
+
 
 fig = plt.figure()
 plt.xlim(Settings.XRANGE[0],
@@ -29,5 +41,14 @@ def animate(i):
 # SHOWING ANIMATION
 # ___________
 
-ani = FuncAnimation(fig, animate, repeat=False, interval=200)
-plt.show()
+if (__name__ != '__main__'):
+    ani = FuncAnimation(fig, animate, repeat=False, interval=200)
+    plt.show()
+
+# ___________
+# SAVING TO GIF
+# ___________
+
+else:
+    ani = FuncAnimation(fig, animate, repeat=False, interval=10, frames=5)
+    ani.save('line.gif', writer=ImageMagickFileWriter())
