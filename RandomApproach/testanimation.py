@@ -3,7 +3,7 @@ import matplotlib
 from matplotlib.animation import FuncAnimation
 from matplotlib.animation import ImageMagickFileWriter
 
-from RandomApproach import RandomApproach
+from RandomApproachAnimation import RandomApproachAnimation
 from functions import cross_in_tray
 from Settings import Settings
 
@@ -19,10 +19,10 @@ matplotlib.rcParams['animation.ffmpeg_path'] = 'C:\\ffmpeg\\bin\\ffmpeg.exe'
 # _____________
 # _____________
 
-r = RandomApproach(cross_in_tray,
-                   Settings,
-                   10**5,
-                   10**3)
+r = RandomApproachAnimation(cross_in_tray,
+                            Settings,
+                            10 ** 5,
+                            10 ** 3)
 
 it = r.__iter__()
 
@@ -45,5 +45,5 @@ if(__name__ != '__main__'):
 # ___________
 
 else:
-    ani = FuncAnimation(r.fig, animate, repeat=False, interval=10, frames=100)
+    ani = FuncAnimation(r.fig, animate, repeat=False, interval=10, frames=5)
     ani.save('line.gif', writer=ImageMagickFileWriter())

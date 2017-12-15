@@ -4,7 +4,7 @@ from Holder import Holder
 
 import matplotlib.pyplot as plt
 
-class RandomApproach:
+class RandomApproachAnimation:
     def __init__(self,
                  func,
                  settings,
