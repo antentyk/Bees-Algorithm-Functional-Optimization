@@ -1,19 +1,19 @@
 from pylab import cm
-from functions import cross_in_tray
+from functions import *
 from Point import Point
 from Features import Features
 from ColoredPoint import ColoredPoint
 
 class Settings:
-    XRANGE = (-10, 10)
-    YRANGE = (-10, 10)
+    XRANGE = (0, 100)
+    YRANGE = (0, 100)
 
     COLORMAP = cm.get_cmap('hot')
 
     SIZEBEST = 300
     SIZELOCALBEST = 100
     SIZEBAD = 10
-    SIZETOR = 100000/2.54
+    SIZETOR = 50000/2.54
 
     BORDERCOLORBEST = (0,0,0,0)
     BORDERCOLORLOCALBEST = (0,0,0,0)
@@ -28,18 +28,18 @@ class Settings:
 
     BORDERWIDTH = 3
 
-    BIGGESTOBSERVED = 1
-    LOWESTOBSERVED = -3
+    BIGGESTOBSERVED = 2.5
+    LOWESTOBSERVED = -0.1
 
-    BEESNUM = 100
+    BEESNUM = 1000
     ELITE = 10
     NONELITE = 5
     RECRUITEDELITE = 100
     RECRUITEDNONELITE = 20
-    NGH = 1
+    NGH = 10
 
-    LOCALSKIPNUM = 10
-    FUNC = cross_in_tray
+    LOCALSKIPNUM = 50
+    FUNC = griewank
 
     @classmethod
     def decideoncolor(cls, z):

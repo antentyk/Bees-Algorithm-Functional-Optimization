@@ -53,4 +53,4 @@ def show_all_static(name, xrange, yrange, precision):
     plot_3d(name, xrange, yrange, precision)
     plt.show()
 
-show_all_static(cross_in_tray, [-5, 5], [-10, 10], 10)
+show_all_static(cross_in_tray, [-5, 5], [-5, 5], 10)

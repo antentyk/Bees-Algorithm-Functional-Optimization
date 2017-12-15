@@ -4,7 +4,7 @@ from matplotlib.animation import FuncAnimation
 from matplotlib.animation import ImageMagickFileWriter
 
 from RandomApproachAnimation import RandomApproachAnimation
-from functions import cross_in_tray
+from functions import *
 from Settings import Settings
 
 # _____________
@@ -19,7 +19,7 @@ matplotlib.rcParams['animation.ffmpeg_path'] = 'C:\\ffmpeg\\bin\\ffmpeg.exe'
 # _____________
 # _____________
 
-r = RandomApproachAnimation(cross_in_tray,
+r = RandomApproachAnimation(shubert,
                             Settings,
                             10 ** 5,
                             10 ** 3)

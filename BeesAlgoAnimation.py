@@ -42,7 +42,7 @@ def animate(i):
 # ___________
 
 if (__name__ != '__main__'):
-    ani = FuncAnimation(fig, animate, repeat=False, interval=200)
+    ani = FuncAnimation(fig, animate, repeat=False, interval=10, frames=500)
     plt.show()
 
 # ___________
@@ -50,5 +50,5 @@ if (__name__ != '__main__'):
 # ___________
 
 else:
-    ani = FuncAnimation(fig, animate, repeat=False, interval=10, frames=5)
+    ani = FuncAnimation(fig, animate, repeat=False, interval=2, frames=100)
     ani.save('line.gif', writer=ImageMagickFileWriter())
