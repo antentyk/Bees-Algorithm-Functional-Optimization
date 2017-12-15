@@ -39,7 +39,6 @@ class Settings:
     NGH = 1
 
     LOCALSKIPNUM = 10
-    GLOBALSKIPNUM = 20
     FUNC = cross_in_tray
 
     @classmethod

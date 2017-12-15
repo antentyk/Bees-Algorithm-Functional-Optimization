@@ -20,7 +20,7 @@ class Controller:
     def formsites(self):
         for i in range(self.settings.BEESNUM):
             self.sites.append(self.fabric.get())
-        self.sites.sort(key = lambda item: item.z, reverse=True)
+        self.sites.sort(key = lambda item: item.z)
     def update(self, coloredpoint):
         self.pointscontroller.add(coloredpoint)
         if(not self.wasglobalbest):
