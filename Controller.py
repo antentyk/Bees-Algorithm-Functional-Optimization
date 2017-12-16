@@ -1,60 +1,108 @@
-from PointFabric import PointFabric
+from CoordinateFabric import CoordinateFabric
 from LocalController import LocalController
-from ColoredPoint import ColoredPoint
 from Point import Point
+from Coordinate import Coordinate
 from Features import Features
 from PointsController import PointsController
 
+
 class Controller:
+    """
+    This class represents a Controller of
+    plotting the overall graph - a bunch of local searches
+    """
+
     def __init__(self,
                  graph,
                  settings):
+        """
+        :param graph (matplotlib.pyplot.scatter): graph instance that
+            needs to be filled while exporing the neighbourhood
+        :param settings (Settings): settings of the graph to be plotted and
+            bees algorithm itself
+        Settings that are used here:
+            determing elite and nonelite sites:
+                - BEESNUM
+                - ELITE
+                - NONELITE
+                - RECRUITEDELITE
+                - RECRUITEDNONELITE
+            plotting the points on the graph:
+                - getbest()
+                - getlocalbest()
+                - SIZELOCALBEST
+                - OPACITYLOCALBEST
+                - getrgbcolor()
+        """
         self.graph = graph
         self.settings = settings
+        self.globalbest = Point(Coordinate(float('inf'), float('inf'), float('inf')),
+                                Features(None, None, None))
         self.wasglobalbest = False
-        self.fabric = PointFabric(self.settings.XRANGE,
-                                  self.settings.YRANGE,
-                                  self.settings.FUNC)
+        self.fabric = CoordinateFabric(settings)
         self.sites = []
         self.pointscontroller = PointsController()
+
     def formsites(self):
+        """
+        This function is used to determine to elite and nonelite
+            site.
+        It picks random points on a plane and sorts it in
+            ascending order of function value
+        """
         for i in range(self.settings.BEESNUM):
-            self.sites.append(self.fabric.get())
-        self.sites.sort(key = lambda item: item.z)
-    def update(self, coloredpoint):
-        self.pointscontroller.add(coloredpoint)
-        if(not self.wasglobalbest):
+            self.sites.append(self.fabric.getcoordinate())
+        self.sites.sort(key=lambda item: item.z)
+
+    def add(self, coordinate):
+        """
+        adds Cooordinate to the graph
+        coordinate is assumed to be a result of a local search
+        hence, function can update the global minimum
+        or just add a Point as local best
+
+        :param coordinate (Coordinate): localbest coordinate of performed
+            local search
+        :return: None
+        """
+        if (not self.wasglobalbest):
             self.wasglobalbest = True
-            newpoint = self.settings.getbest(coloredpoint.point)
-            self.pointscontroller.changecolor(coloredpoint.point.id,
-                                              newpoint.features.color)
-            self.pointscontroller.changesize(coloredpoint.point.id,
-                                              newpoint.features.size)
-            self.globalbest = newpoint
+            self.globalbest = self.settings.getbest(coordinate)
+            self.pointscontroller.add(self.globalbest)
             return
-        if(coloredpoint.point.z < self.globalbest.point.z):
-            newglobalpoint = self.settings.getbest(coloredpoint.point)
-            self.pointscontroller.changecolor(coloredpoint.point.id,
-                                              newglobalpoint.features.color)
-            self.pointscontroller.changesize(coloredpoint.point.id,
-                                             newglobalpoint.features.size)
 
-            newlocalbestpoint = self.settings.getlocalbest(coloredpoint.point)
-            self.pointscontroller.changecolor(self.globalbest.point.id,
-                                              newlocalbestpoint.features.color)
-            self.pointscontroller.changesize(self.globalbest.point.id,
-                                             newlocalbestpoint.features.size)
+        if (coordinate.z < self.globalbest.coordinate.z):
+            current = self.settings.getbest(coordinate)
+            self.pointscontroller.add(current)
 
-            self.pointscontroller.swap(self.globalbest.point.id,
-                                       newglobalpoint.point.id)
-            self.globalbest = newglobalpoint
+            color = self.settings.getrgbcolor(coordinate.z)
+            color.append(self.settings.OPACITYLOCALBEST)
+            self.pointscontroller.changecolor(self.globalbest.id,
+                                              color)
+            self.pointscontroller.changesize(self.globalbest.id,
+                                             self.settings.SIZELOCALBEST)
+
+            self.globalbest = current
             return
+
+        self.pointscontroller.add(self.settings.getlocalbest(coordinate))
+
     def __iter__(self):
+        """
+        Performs overall plotting of the graph
+        Yields frames - a graph representation in particular moment of time
+
+        :return: generator for self.graph while performing bees algorithm
+        """
         self.formsites()
+
         elite = self.sites[:self.settings.ELITE]
-        if(len(self.sites) > len(elite)):
+
+        if (len(self.sites) > len(elite)):
             nonelite = self.sites[self.settings.ELITE:self.settings.ELITE + self.settings.NONELITE]
-        else: nonelite = []
+        else:
+            nonelite = []
+
         for elitesite in elite:
             lc = LocalController(True,
                                  self.pointscontroller,
@@ -64,9 +112,10 @@ class Controller:
             for state in lc:
                 yield state
             lc.clear()
-            self.update(lc.getlocalbest())
+            self.add(lc.getlocalbestcoordinate())
             self.pointscontroller.set(self.graph)
             yield self.graph
+
         for nonelitesite in nonelite:
             lc = LocalController(False,
                                  self.pointscontroller,
@@ -76,8 +125,13 @@ class Controller:
             for state in lc:
                 yield state
             lc.clear()
-            self.update(lc.getlocalbest())
+            self.add(lc.getlocalbestcoordinate())
             self.pointscontroller.set(self.graph)
             yield self.graph
+
     def getglobalbest(self):
+        """
+        :return (Point): Point instance that corresponds to the global minimum
+            found at that moment
+        """
         return self.globalbest

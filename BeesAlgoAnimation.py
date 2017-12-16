@@ -1,3 +1,7 @@
+# An example of using Controller in order
+# to animate the process of the Bees Algorithm
+
+
 import matplotlib.pyplot as plt
 import matplotlib
 from matplotlib.animation import FuncAnimation
@@ -41,8 +45,8 @@ def animate(i):
 # SHOWING ANIMATION
 # ___________
 
-if (__name__ != '__main__'):
-    ani = FuncAnimation(fig, animate, repeat=False, interval=10, frames=500)
+if (__name__ == '__main__'):
+    ani = FuncAnimation(fig, animate, repeat=False, interval=200)
     plt.show()
 
 # ___________
@@ -50,5 +54,5 @@ if (__name__ != '__main__'):
 # ___________
 
 else:
-    ani = FuncAnimation(fig, animate, repeat=False, interval=2, frames=100)
+    ani = FuncAnimation(fig, animate, repeat=False, interval=10, frames=5)
     ani.save('line.gif', writer=ImageMagickFileWriter())
